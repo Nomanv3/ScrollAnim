@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <div class="w-full bg-zinc-900">
+      <div class="parent relative top-0 left-0 w-full h-[2000vh] bg-zinc-400">
+        <div class="can sticky top-0 left-0 w-full h-screen bg-pink-400 overflow-x-hidden">
+          <canvas class="w-full h-screen" id="canvas"></canvas>
+          <!-- <img src="./Frames/frame_0001.jpeg" class="w-full h-screen" alt=""> -->
+          <div
+            class="absolute animate1 z-[2] text-white bottom-10 w-1/2 left-10"
+          >
+            <h1 class="leading-10 font-[100] text-4xl">
+              &COPY; 2024 Noman Dev
+            </h1>
+            <h1 class="text-3xl">SHAPPING BRANDS &#xf337; CRAFFTING MOTION</h1>
+          </div>
+          <div
+            class="absolute animate2 z-[2] text-white flex bottom-10 w-1/2 right-10 text-right opacity-0"
+          >
+            <h1 class="leading-20 font-[100] uppercase text-5xl">
+              Transforming Visions
+            </h1>
+            <h1 class="text-xl w-1/2">
+              Building identity and inspiring action . Sculpting digital
+              experties resonate
+            </h1>
+          </div>
+
+          <div
+            class="absolute animate3 z-[2] text-white top-1/2 left-1/2 -translate-x-1/2 text-center opacity-0"
+          >
+            <h1 class="leading-20 font-[100] uppercase text-5xl">
+              Elevating Aesthetics
+            </h1>
+            <h1 class="text-xl">
+              Crafting solutions and exploring new horizons . Evolving
+              narratives and elevating Aesthetics in every project.
+            </h1>
+          </div>
+
+          <div class="w-1/3  panel translate-x-full  h-screen bg-white absolute right-0 top-0 z-[2] p-10">
+            <h3 class="panelelem font-[100] text-xl">C 2024 Doze.Std</h3>
+              <p class="panelelem mt-10 text-xl">
+                Sculpting digital
+                Transforming visions into digital realities . Weaving stories that captivate and innovate.
+                Exploring new possiblities with  a focus on narratives evolutions . Crafting solutions that engage
+                and elevate.
+              </p>
+              <button class="panelelem border-[1px] px-3 py-2 border-[#555] font-[100] mt-6">Get Reviews</button>
+
+            <div class="panelelem absolute bottom-10">
+              <h3 class="text-xl">Innovating Design</h3>
+              <p class="text-sm mt-3">Connecting ideas to foster creativity . Designing impactful experiences 
+                that
+                resonate
+              Feel free to mix and match these sections to suit your website's design needs!
+
+              </p>
+             <button class="bg-black text-white px-7 text-sm mt-4 py-4 font-[100] capitalize">experience</button>
+            </div>
+
+          </div>
+
+          <div class="absolute z-[2] panelism text-white top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-6xl traking-tighter opacity-0">
+            &COPY;panelism <span class="line w-10 h-1 bg-white inline-block "></span>2050
+          </div>          
+        </div>       
+        <div class="w-full p-10 bg-white">
+          <h1 class="text-8xl traking-tighter">&REG; Our Recent Works</h1>
+          <div class="w-1/2  p-3 mt-32 bg-red-500"></div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+    <script>
+      var canvas = document.querySelector("#canvas");
+      let context = canvas.getContext("2d");
+      const frames = {
+        initialindex: 0,
+        maxIndex: 1345,
+      };
+
+      let tracking = 0;
+      let images = [];
+
+      function preloader() {
+        for (let i = 1; i <= frames.maxIndex; i++) {
+          let imgurl = `./Frames/frame_${i.toString().padStart(4, "0")}.jpeg`;
+          //  console.log(imgurl)
+          let img = new Image();
+          img.src = imgurl;
+
+          img.onload = () => {
+            tracking++;
+            if (tracking === frames.maxIndex) {
+              loadimg(frames.initialindex);
+              startAnimation();
+              console.log("all images are loaded here");
+            }
+          };
+          images.push(img);
+        }
+      }
+      console.log(canvas);
+
+      function loadimg(index) {
+        if (index >= 0 && index <= frames.maxIndex) {
+          let img = images[index];
+
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+
+          const scaleX = canvas.width / img.width;
+          const scaleY = canvas.height / img.height;
+
+          let maxscale = Math.max(scaleX, scaleY);
+
+          let newWidth = img.width * maxscale;
+          let newheight = img.height * maxscale;
+
+          const offsetX = (canvas.width - newWidth) / 2;
+          const offsetY = (canvas.height - newheight) / 2;
+
+          // context.clearReact(0 ,0 ,canvas.width , canvas.height)
+          context.clearRect(0, 0, canvas.width, canvas.height);
+
+          context.imageSmoothingEnabled = true;
+          context.imageSmoothingQuality = "high";
+          context.drawImage(img, offsetX, offsetY, newWidth, newheight);
+
+          frames.initialindex = index;
+        }
+      }
+
+      function startAnimation() {
+        let tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: ".parent",
+            start: "top top",
+            scrub: 2,
+            end: "bottom bottom",
+          },
+        });
+
+        function framUpdate(index) {
+          return {
+            initialindex: index,
+            ease: "linear",
+            onUpdate: function () {
+              loadimg(Math.floor(frames.initialindex));
+            },
+          };
+        }
+        tl.to(frames, framUpdate(150), "first")
+          .to(".animate1", { opacity: 0, ease: "linear" }, "first")
+          
+          .to(frames, framUpdate(250), "Second")
+          .to(".animate2", { opacity: 1, ease: "linear" }, "Second")
+          
+          .to(frames, framUpdate(300), "Third")
+          .to(".animate2", { opacity: 1, ease: "linear" }, "Third")
+
+          .to(frames, framUpdate(350), "fourth")
+          .to(".animate2", { opacity: 0, ease: "linear" }, "fourth")
+
+
+          .to(frames , framUpdate(500) , "Fifth")
+          .to(".animate3" , { opacity : 1 , ease : "linear"} , "Fifth")
+
+          .to(frames , framUpdate(550) , "sixth")
+          .to(".animate3" , { opacity : 1 , ease : "linear"} , "sixth")
+
+          .to(frames , framUpdate(520) , "Seventh")
+          .to(".animate3" , {opacity : 0 , ease:"linear"} , "sixth")
+
+          .to(frames , framUpdate(560) , "Eighth")
+          .to('.panel' , {x:"0%", ease:"expo"} , "Eighth")
+       
+          .to(frames , framUpdate(600) , "Ninth")
+          .to('.panel' , {x:"0%", ease:"expo"} , "Ninth")
+      
+          .to(frames , framUpdate(670) , "Tenth")
+          .to('.panel' , {opacity: 0, ease:"expo"} , "Tenth")
+      
+          .to(frames , framUpdate(800) , "eleventh")
+          .to('canvas' , {scale : .5, ease:"linear"} , "eleventh")
+
+          .to(frames , framUpdate(850) , "twelveth")
+          .to('.panelism' , {opacity : 1, ease:"expo"} , "twelveth")
+
+          .to(frames , framUpdate(880) , "twelveth")
+          .to('.panelism span' , {width : 200, ease:"expo "} , "twelveth")
+
+          .to(frames , framUpdate(950) , "thirteen")
+          .to("canvas" , {scale : 1 , ease : "linear"} ,"thirteen" )
+
+          .to(frames , framUpdate(1340) , "fourteen")
+          .to('.panelism' , {scale : 2, ease:"circ"} , "fourteen")
+      
+        }
+      window.addEventListener("resize", function () {
+        loadimg(Math.floor(frames.initialindex));
+      });
+      preloader();
+    </script>
+  </body>
+</html>
